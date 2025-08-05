@@ -139,7 +139,7 @@ export default function VedicChart({ planets }: VedicChartProps) {
   return (
     <div className="p-6">
       <div className="text-center mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-1">Birth Chart</h2>
+        <h2 className="text-lg font-bold text-black mb-1">Birth Chart</h2>
         <p className="text-gray-500 text-sm">Rashi Chart</p>
       </div>
 
@@ -154,23 +154,23 @@ export default function VedicChart({ planets }: VedicChartProps) {
             {`
               .house {
                 fill: #ffffff;
-                stroke: #808000;
+                stroke: #000000;
                 stroke-width: 2;
               }
               .planet-label {
                 font-family: 'Arial', sans-serif;
                 font-size: 13px;
                 font-weight: bold;
-                fill: #1e293b;
+                fill: #000000;
                 text-anchor: middle;
                 dominant-baseline: middle;
                 pointer-events: none;
               }
               .planet-label.retrograde {
-                fill: #dc2626;
+                fill: #f97316;
               }
               .ascendant-label {
-                fill: #16a34a;
+                fill: #f97316;
               }
               .empty-house-marker {
                 fill: #94a3b8;
@@ -196,39 +196,39 @@ export default function VedicChart({ planets }: VedicChartProps) {
       </div>
 
       <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-        <div className="text-xs text-gray-600 space-y-2">
+        <div className="text-xs text-black space-y-2">
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <span className="font-medium text-green-600">As</span> - Ascendant
+              <span className="font-medium text-orange-500">As</span> - Ascendant
             </div>
             <div>
               <span className="font-medium text-orange-600">Su</span> - Sun
             </div>
             <div>
-              <span className="font-medium text-blue-400">Mo</span> - Moon
+              <span className="font-medium text-black">Mo</span> - Moon
             </div>
             <div>
-              <span className="font-medium text-red-600">Ma</span> - Mars
+              <span className="font-medium text-orange-500">Ma</span> - Mars
             </div>
             <div>
-              <span className="font-medium text-green-600">Me</span> - Mercury
+              <span className="font-medium text-black">Me</span> - Mercury
             </div>
             <div>
-              <span className="font-medium text-yellow-600">Ju</span> - Jupiter
+              <span className="font-medium text-orange-500">Ju</span> - Jupiter
             </div>
             <div>
-              <span className="font-medium text-pink-500">Ve</span> - Venus
+              <span className="font-medium text-black">Ve</span> - Venus
             </div>
             <div>
-              <span className="font-medium text-gray-700">Sa</span> - Saturn
+              <span className="font-medium text-orange-500">Sa</span> - Saturn
             </div>
             <div>
-              <span className="font-medium text-purple-600">Ra</span> - Rahu
+              <span className="font-medium text-black">Ra</span> - Rahu
             </div>
           </div>
           <div className="mt-2 pt-2 border-t border-gray-300">
             <p className="text-xs text-gray-500">
-              <span className="text-red-600 font-medium">Red</span> = Retrograde planets
+              <span className="text-orange-500 font-medium">Orange</span> = Retrograde planets
             </p>
           </div>
         </div>

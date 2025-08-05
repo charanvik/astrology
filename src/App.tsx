@@ -80,8 +80,8 @@ function App() {
                     onClick={() => setViewMode('birth')}
                     className={`flex-1 py-3 px-4 text-center font-medium transition-all duration-200 ${
                       viewMode === 'birth'
-                        ? 'bg-olive-600 text-white'
-                        : 'text-gray-600 hover:bg-gray-50'
+                        ? 'bg-orange-500 text-white'
+                        : 'text-black hover:bg-gray-50'
                     } rounded-l-lg`}
                   >
                     Birth Chart
@@ -90,8 +90,8 @@ function App() {
                     onClick={() => setViewMode('navamsha')}
                     className={`flex-1 py-3 px-4 text-center font-medium transition-all duration-200 ${
                       viewMode === 'navamsha'
-                        ? 'bg-olive-600 text-white'
-                        : 'text-gray-600 hover:bg-gray-50'
+                        ? 'bg-orange-500 text-white'
+                        : 'text-black hover:bg-gray-50'
                     } rounded-r-lg`}
                   >
                     Navamsha Chart

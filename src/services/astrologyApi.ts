@@ -68,7 +68,15 @@ export async function fetchPlanetaryData(birthData: BirthData): Promise<Record<s
     
     // Extract planets data from the second object in the output array
     if (data.output && data.output.length > 1) {
-      return data.output[1] as Record<string, Planet>;
+      const planets = data.output[1] as Record<string, Planet>;
+      // Filter out Uranus, Neptune, and Pluto
+      const filteredPlanets: Record<string, Planet> = {};
+      for (const [key, planet] of Object.entries(planets)) {
+        if (!['Uranus', 'Neptune', 'Pluto'].includes(key)) {
+          filteredPlanets[key] = planet;
+        }
+      }
+      return filteredPlanets;
     } else {
       throw new Error('Invalid API response format');
     }
@@ -179,14 +187,17 @@ export async function fetchNavamsaData(birthData: BirthData): Promise<Record<str
     // Convert the numbered keys to planet names
     const navamsaData: Record<string, NavamsaPlanet> = {};
     Object.values(data.output).forEach((planet) => {
-      navamsaData[planet.name] = planet;
+      // Filter out Uranus, Neptune, and Pluto
+      if (!['Uranus', 'Neptune', 'Pluto'].includes(planet.name)) {
+        navamsaData[planet.name] = planet;
+      }
     });
     
     return navamsaData;
   } catch (error) {
     console.error('Error fetching Navamsha data:', error);
     
-    // Return mock data for demonstration purposes
+    // Return mock data for demonstration purposes (without outer planets)
     return {
       Ascendant: {
         name: "Ascendant",

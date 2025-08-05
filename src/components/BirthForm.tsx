@@ -19,6 +19,21 @@ interface BirthFormProps {
   loading: boolean;
 }
 
+// Function to detect timezone automatically
+function getTimezoneOffset(): number {
+  const offset = new Date().getTimezoneOffset();
+  return -offset / 60; // Convert to hours and flip sign
+}
+
+// Function to convert 12-hour to 24-hour format
+function convertTo24Hour(hours: number, period: 'AM' | 'PM'): number {
+  if (period === 'AM') {
+    return hours === 12 ? 0 : hours;
+  } else {
+    return hours === 12 ? 12 : hours + 12;
+  }
+}
+
 export default function BirthForm({ onSubmit, loading }: BirthFormProps) {
   const [formData, setFormData] = useState<BirthData>({
     year: 1990,
@@ -29,12 +44,22 @@ export default function BirthForm({ onSubmit, loading }: BirthFormProps) {
     seconds: 0,
     latitude: 28.6139,
     longitude: 77.2090,
-    timezone: 5.5
+    timezone: getTimezoneOffset()
+  });
+  
+  const [timeFormat, setTimeFormat] = useState({
+    hours: 12,
+    period: 'PM' as 'AM' | 'PM'
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    // Convert 12-hour format to 24-hour for API
+    const hours24 = convertTo24Hour(timeFormat.hours, timeFormat.period);
+    onSubmit({
+      ...formData,
+      hours: hours24
+    });
   };
 
   const handleInputChange = (field: keyof BirthData, value: string) => {
@@ -42,6 +67,20 @@ export default function BirthForm({ onSubmit, loading }: BirthFormProps) {
       ...prev,
       [field]: parseFloat(value) || 0
     }));
+  };
+  
+  const handleTimeChange = (field: 'hours' | 'period', value: string) => {
+    if (field === 'hours') {
+      setTimeFormat(prev => ({
+        ...prev,
+        hours: parseInt(value) || 1
+      }));
+    } else {
+      setTimeFormat(prev => ({
+        ...prev,
+        period: value as 'AM' | 'PM'
+      }));
+    }
   };
 
   const handleLocationSelect = (lat: number, lon: number, name: string) => {
@@ -62,97 +101,111 @@ export default function BirthForm({ onSubmit, loading }: BirthFormProps) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-3">
-            <div className="flex items-center space-x-2 text-olive-600 mb-2">
+            <div className="flex items-center space-x-2 text-orange-500 mb-2">
               <Calendar className="w-5 h-5" />
               <h3 className="font-medium text-sm">Date</h3>
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Year</label>
+              <label className="block text-xs font-medium text-black mb-1">Year</label>
               <input
                 type="number"
                 value={formData.year}
                 onChange={(e) => handleInputChange('year', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Month</label>
+              <label className="block text-xs font-medium text-black mb-1">Month</label>
               <input
                 type="number"
                 min="1"
                 max="12"
                 value={formData.month}
                 onChange={(e) => handleInputChange('month', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Date</label>
+              <label className="block text-xs font-medium text-black mb-1">Date</label>
               <input
                 type="number"
                 min="1"
                 max="31"
                 value={formData.date}
                 onChange={(e) => handleInputChange('date', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center space-x-2 text-olive-600 mb-2">
+            <div className="flex items-center space-x-2 text-orange-500 mb-2">
               <Clock className="w-5 h-5" />
               <h3 className="font-medium text-sm">Time</h3>
             </div>
             
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Hours</label>
-              <input
-                type="number"
-                min="0"
-                max="23"
-                value={formData.hours}
-                onChange={(e) => handleInputChange('hours', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
-                required
-              />
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs font-medium text-black mb-1">Hours</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="12"
+                  value={timeFormat.hours}
+                  onChange={(e) => handleTimeChange('hours', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-black mb-1">AM/PM</label>
+                <select
+                  value={timeFormat.period}
+                  onChange={(e) => handleTimeChange('period', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  required
+                >
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Minutes</label>
+              <label className="block text-xs font-medium text-black mb-1">Minutes</label>
               <input
                 type="number"
                 min="0"
                 max="59"
                 value={formData.minutes}
                 onChange={(e) => handleInputChange('minutes', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Seconds</label>
+              <label className="block text-xs font-medium text-black mb-1">Seconds</label>
               <input
                 type="number"
                 min="0"
                 max="59"
                 value={formData.seconds}
                 onChange={(e) => handleInputChange('seconds', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center space-x-2 text-olive-600 mb-2">
+            <div className="flex items-center space-x-2 text-orange-500 mb-2">
               <MapPin className="w-5 h-5" />
               <h3 className="font-medium text-sm">Location</h3>
             </div>
@@ -166,38 +219,39 @@ export default function BirthForm({ onSubmit, loading }: BirthFormProps) {
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Latitude</label>
+              <label className="block text-xs font-medium text-black mb-1">Latitude</label>
               <input
                 type="number"
                 step="0.0001"
                 value={formData.latitude}
                 onChange={(e) => handleInputChange('latitude', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Longitude</label>
+              <label className="block text-xs font-medium text-black mb-1">Longitude</label>
               <input
                 type="number"
                 step="0.0001"
                 value={formData.longitude}
                 onChange={(e) => handleInputChange('longitude', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Timezone</label>
+              <label className="block text-xs font-medium text-black mb-1">Timezone (Auto-detected)</label>
               <input
                 type="number"
                 step="0.5"
                 value={formData.timezone}
                 onChange={(e) => handleInputChange('timezone', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-gray-50"
                 required
+                readOnly
               />
             </div>
           </div>
@@ -207,7 +261,7 @@ export default function BirthForm({ onSubmit, loading }: BirthFormProps) {
           <button
             type="submit"
             disabled={loading}
-            className="bg-olive-600 text-white px-6 py-3 rounded-lg hover:bg-olive-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-md w-full md:w-auto"
+            className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-md w-full md:w-auto"
           >
             {loading ? 'Calculating...' : 'Calculate Chart'}
           </button>
