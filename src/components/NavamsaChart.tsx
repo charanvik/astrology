@@ -205,6 +205,5 @@ export default function NavamsaChart({ planets }: NavamsaChartProps) {
           </div>
         </div>
       </div>
-    </div>
   );
 }
