@@ -137,16 +137,16 @@ export default function VedicChart({ planets }: VedicChartProps) {
   }, [planets]);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 border-2 border-olive-100">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-black mb-2">वैदिक चार्ट</h2>
-        <p className="text-gray-600">Traditional Vedic Astrological Chart</p>
+    <div className="p-6">
+      <div className="text-center mb-6">
+        <h2 className="text-lg font-bold text-gray-900 mb-1">Birth Chart</h2>
+        <p className="text-gray-500 text-sm">Rashi Chart</p>
       </div>
 
       <div className="flex justify-center">
         <svg
           ref={svgRef}
-          className="w-full max-w-2xl h-auto bg-white rounded-xl shadow-lg"
+          className="w-full max-w-lg h-auto bg-gray-50 rounded-lg border border-gray-200"
           viewBox="0 0 780 800"
           preserveAspectRatio="xMidYMid meet"
         >
@@ -195,32 +195,40 @@ export default function VedicChart({ planets }: VedicChartProps) {
         </svg>
       </div>
 
-      <div className="mt-6 p-4 bg-gradient-to-r from-olive-50 to-orange-50 rounded-lg border border-olive-200">
-        <div className="text-sm text-gray-700 space-y-2">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+        <div className="text-xs text-gray-600 space-y-2">
+          <div className="grid grid-cols-3 gap-2">
             <div>
-              <span className="font-semibold text-green-600">As</span> - Ascendant
+              <span className="font-medium text-green-600">As</span> - Ascendant
             </div>
             <div>
-              <span className="font-semibold text-orange-600">Su</span> - Sun, <span className="font-semibold text-blue-400">Mo</span> - Moon
+              <span className="font-medium text-orange-600">Su</span> - Sun
             </div>
             <div>
-              <span className="font-semibold text-red-600">Ma</span> - Mars, <span className="font-semibold text-green-600">Me</span> - Mercury
+              <span className="font-medium text-blue-400">Mo</span> - Moon
             </div>
             <div>
-              <span className="font-semibold text-yellow-600">Ju</span> - Jupiter, <span className="font-semibold text-pink-500">Ve</span> - Venus
+              <span className="font-medium text-red-600">Ma</span> - Mars
             </div>
             <div>
-              <span className="font-semibold text-gray-700">Sa</span> - Saturn
+              <span className="font-medium text-green-600">Me</span> - Mercury
             </div>
             <div>
-              <span className="font-semibold text-purple-600">Ra</span> - Rahu, <span className="font-semibold text-indigo-600">Ke</span> - Ketu
+              <span className="font-medium text-yellow-600">Ju</span> - Jupiter
+            </div>
+            <div>
+              <span className="font-medium text-pink-500">Ve</span> - Venus
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Sa</span> - Saturn
+            </div>
+            <div>
+              <span className="font-medium text-purple-600">Ra</span> - Rahu
             </div>
           </div>
-          <div className="mt-3 pt-3 border-t border-olive-200">
-            <p className="text-xs text-gray-600">
-              <span className="text-red-600 font-semibold">Red text</span> indicates retrograde planets. 
-              Numbers in parentheses show zodiac signs (1-12).
+          <div className="mt-2 pt-2 border-t border-gray-300">
+            <p className="text-xs text-gray-500">
+              <span className="text-red-600 font-medium">Red</span> = Retrograde planets
             </p>
           </div>
         </div>

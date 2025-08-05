@@ -53,16 +53,16 @@ export default function NavamsaChart({ planets }: NavamsaChartProps) {
     }
 
     function renderNavamsaChart(navamsaData: Record<string, any>) {
-      if (!navamsaData.Ascendant) {
-        console.error("Ascendant data is missing.");
-        return;
-      }
-
       // Group planets by house number
       const housesWithPlanets: Record<string, any[]> = {};
       for (const planetName in navamsaData) {
+        // Skip Ascendant in Navamsha chart
+        if (planetName === 'Ascendant') continue;
+        
         const planet = navamsaData[planetName];
-        const houseId = `house${planet.house}`;
+        // Move planets one house forward clockwise (add 1, wrap around at 12)
+        const adjustedHouse = (planet.house % 12) + 1;
+        const houseId = `house${adjustedHouse}`;
         if (!housesWithPlanets[houseId]) housesWithPlanets[houseId] = [];
         housesWithPlanets[houseId].push(planet);
       }
@@ -108,16 +108,16 @@ export default function NavamsaChart({ planets }: NavamsaChartProps) {
   }, [planets]);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 border-2 border-olive-100">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-black mb-2">नवांश चार्ट</h2>
-        <p className="text-gray-600">Navamsha Chart - The Soul's Journey</p>
+    <div className="p-6">
+      <div className="text-center mb-6">
+        <h2 className="text-lg font-bold text-gray-900 mb-1">Navamsha Chart</h2>
+        <p className="text-gray-500 text-sm">D9 Chart</p>
       </div>
 
       <div className="flex justify-center">
         <svg
           ref={svgRef}
-          className="w-full max-w-2xl h-auto bg-white rounded-xl shadow-lg"
+          className="w-full max-w-lg h-auto bg-gray-50 rounded-lg border border-gray-200"
           viewBox="0 0 780 800"
           preserveAspectRatio="xMidYMid meet"
         >
@@ -166,45 +166,41 @@ export default function NavamsaChart({ planets }: NavamsaChartProps) {
         </svg>
       </div>
 
-      <div className="mt-6 p-4 bg-gradient-to-r from-olive-50 to-orange-50 rounded-lg border border-olive-200">
-        <div className="text-sm text-gray-700 space-y-2">
-          <h3 className="text-lg font-bold text-black mb-3">About Navamsha Chart</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+        <div className="text-xs text-gray-600 space-y-2">
+          <div className="grid grid-cols-3 gap-2">
             <div>
-              <h4 className="font-semibold text-olive-700 mb-2">Spiritual Significance</h4>
-              <p className="text-xs">The Navamsha chart reveals the soul's deeper nature, spiritual path, and karmic patterns. It's considered the most important divisional chart in Vedic astrology.</p>
+              <span className="font-medium text-orange-600">Su</span> - Sun
             </div>
             <div>
-              <h4 className="font-semibold text-orange-600 mb-2">Marriage & Relationships</h4>
-              <p className="text-xs">This chart provides crucial insights into marriage compatibility, spouse characteristics, and the quality of relationships in one's life.</p>
+              <span className="font-medium text-blue-400">Mo</span> - Moon
+            </div>
+            <div>
+              <span className="font-medium text-red-600">Ma</span> - Mars
+            </div>
+            <div>
+              <span className="font-medium text-green-600">Me</span> - Mercury
+            </div>
+            <div>
+              <span className="font-medium text-yellow-600">Ju</span> - Jupiter
+            </div>
+            <div>
+              <span className="font-medium text-pink-500">Ve</span> - Venus
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Sa</span> - Saturn
+            </div>
+            <div>
+              <span className="font-medium text-purple-600">Ra</span> - Rahu
+            </div>
+            <div>
+              <span className="font-medium text-indigo-600">Ke</span> - Ketu
             </div>
           </div>
-          <div className="mt-3 pt-3 border-t border-olive-200">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <span className="font-semibold text-green-600">As</span> - Ascendant
-              </div>
-              <div>
-                <span className="font-semibold text-orange-600">Su</span> - Sun, <span className="font-semibold text-blue-400">Mo</span> - Moon
-              </div>
-              <div>
-                <span className="font-semibold text-red-600">Ma</span> - Mars, <span className="font-semibold text-green-600">Me</span> - Mercury
-              </div>
-              <div>
-                <span className="font-semibold text-yellow-600">Ju</span> - Jupiter, <span className="font-semibold text-pink-500">Ve</span> - Venus
-              </div>
-              <div>
-                <span className="font-semibold text-gray-700">Sa</span> - Saturn
-              </div>
-              <div>
-                <span className="font-semibold text-purple-600">Ra</span> - Rahu, <span className="font-semibold text-indigo-600">Ke</span> - Ketu
-              </div>
-            </div>
-            <div className="mt-3 pt-3 border-t border-olive-200">
-              <p className="text-xs text-gray-600">
-                <span className="text-red-600 font-semibold">Red text</span> indicates retrograde planets. 
-                Numbers in parentheses show zodiac signs (1-12). H1-H12 represent empty houses.
-              </p>
+          <div className="mt-2 pt-2 border-t border-gray-300">
+            <p className="text-xs text-gray-500">
+              <span className="text-red-600 font-medium">Red</span> = Retrograde planets
+            </p>
             </div>
           </div>
         </div>
