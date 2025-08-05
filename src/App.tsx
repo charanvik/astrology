@@ -35,7 +35,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Android-style Header */}
-      <header className="bg-olive-600 text-white py-4 shadow-md">
+      <header className="bg-orange-600 text-white py-4 shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
